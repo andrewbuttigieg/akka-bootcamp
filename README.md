@@ -2,4 +2,6 @@
 
 this is my work on akka.net
 
-https://travis-ci.org/andrewbuttigieg/akka-bootcamp.svg?branch=master
+![alt tag](https://travis-ci.org/andrewbuttigieg/akka-bootcamp.svg?branch=master)
+
+
