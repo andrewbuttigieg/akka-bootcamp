@@ -1,0 +1,3 @@
+language: csharp
+script:
+  - xbuild /p:Configuration=Debug Unit-2/DoThis/SystemCharting.sln
