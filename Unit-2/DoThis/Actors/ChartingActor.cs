@@ -107,6 +107,25 @@ namespace ChartApp.Actors
                 }
             }
         }
+                
+        private void SetChartBoundaries()
+        {
+            double maxAxisX, maxAxisY, minAxisX, minAxisY = 0.0d;
+            var allPoints = _seriesIndex.Values.SelectMany(series => series.Points).ToList();
+            var yValues = allPoints.SelectMany(point => point.YValues).ToList();
+            maxAxisX = xPosCounter;
+            minAxisX = xPosCounter - MaxPoints;
+            maxAxisY = yValues.Count > 0 ? Math.Ceiling(yValues.Max()) : 1.0d;
+            minAxisY = yValues.Count > 0 ? Math.Floor(yValues.Min()) : 0.0d;
+            if (allPoints.Count > 2)
+            {
+                var area = _chart.ChartAreas[0];
+                area.AxisX.Minimum = minAxisX;
+                area.AxisX.Maximum = maxAxisX;
+                area.AxisY.Minimum = minAxisY;
+                area.AxisY.Maximum = maxAxisY;
+            }
+        }
 
         #endregion
     }
