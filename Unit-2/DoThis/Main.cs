@@ -25,6 +25,7 @@ namespace ChartApp
 
         private void Main_Load(object sender, EventArgs e)
         {
+            /*
             _chartActor = Program.ChartActors.ActorOf(Props.Create(() =>
                 new ChartingActor(sysChart)), "charting");
             _chartActor.Tell(new ChartingActor.InitializeChart(null)); //no initial series
@@ -52,6 +53,7 @@ namespace ChartApp
         
             // Set the CPU toggle to ON so we start getting some data
             _toggleActors[CounterType.Cpu].Tell(new ButtonToggleActor.Toggle());
+            */
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
