@@ -21,7 +21,6 @@ namespace ChartApp.Actors
 
         #region Messages
         
-                
         /// <summary>
         /// Remove an existing <see cref="Series"/> from the chart
         /// </summary>
@@ -71,6 +70,8 @@ namespace ChartApp.Actors
 
             Receive<InitializeChart>(ic => HandleInitialize(ic));
             Receive<AddSeries>(addSeries => HandleAddSeries(addSeries));
+            Receive<RemoveSeries>(removeSeries => HandleRemoveSeries(removeSeries));
+            Receive<Metric>(metric => HandleMetrics(metric));
         }
 
         #region Individual Message Type Handlers
