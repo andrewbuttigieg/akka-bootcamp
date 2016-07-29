@@ -8,6 +8,17 @@ namespace ChartApp.Actors
 {
     public class ChartingActor : ReceiveActor
     {
+                
+        /// <summary>
+        /// Maximum number of points we will allow in a series
+        /// </summary>
+        public const int MaxPoints = 250;
+        
+        /// <summary>
+        /// Incrementing counter we use to plot along the X-axis
+        /// </summary>
+        private int xPosCounter = 0;
+
         #region Messages
 
         public class InitializeChart
