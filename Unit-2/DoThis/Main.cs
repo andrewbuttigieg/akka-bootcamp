@@ -25,7 +25,6 @@ namespace ChartApp
 
         private void Main_Load(object sender, EventArgs e)
         {
-            /*
             _chartActor = Program.ChartActors.ActorOf(Props.Create(() =>
                 new ChartingActor(sysChart)), "charting");
             _chartActor.Tell(new ChartingActor.InitializeChart(null)); //no initial series
@@ -53,7 +52,6 @@ namespace ChartApp
         
             // Set the CPU toggle to ON so we start getting some data
             _toggleActors[CounterType.Cpu].Tell(new ButtonToggleActor.Toggle());
-            */
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -66,27 +64,20 @@ namespace ChartApp
         }
 
         #endregion
-        
+
         private void btnCpu_Click(object sender, EventArgs e)
         {
             _toggleActors[CounterType.Cpu].Tell(new ButtonToggleActor.Toggle());
         }
-        
+
         private void btnMemory_Click(object sender, EventArgs e)
         {
             _toggleActors[CounterType.Memory].Tell(new ButtonToggleActor.Toggle());
         }
-        
+
         private void btnDisk_Click(object sender, EventArgs e)
         {
             _toggleActors[CounterType.Disk].Tell(new ButtonToggleActor.Toggle());
-        }
-        
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var series = ChartDataHelper.RandomSeries("FakeSeries" +
-                _seriesCounter.GetAndIncrement());
-            _chartActor.Tell(new ChartingActor.AddSeries(series));
         }
     }
 }
