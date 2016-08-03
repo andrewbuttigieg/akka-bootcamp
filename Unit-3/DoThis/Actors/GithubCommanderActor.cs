@@ -8,8 +8,10 @@ namespace GithubActors.Actors
     /// <summary>
     /// Top-level actor responsible for coordinating and launching repo-processing jobs
     /// </summary>
-    public class GithubCommanderActor : ReceiveActor
+    public class GithubCommanderActor : ReceiveActor, IWithUnboundedStash
     {
+        public IStash Stash { get; set; }
+        
         #region Message classes
 
         public class CanAcceptJob
@@ -49,27 +51,60 @@ namespace GithubActors.Actors
 
         public GithubCommanderActor()
         {
+           Ready();
+        }
+        
+        private void Ready()
+        {
             Receive<CanAcceptJob>(job =>
             {
-                _canAcceptJobSender = Sender;
                 _coordinator.Tell(job);
+        
+                BecomeAsking();
             });
-
+        }
+        
+        private void BecomeAsking()
+        {
+            _canAcceptJobSender = Sender;
+            pendingJobReplies = 3; //the number of routees
+            Become(Asking);
+        }
+        
+        private void Asking()
+        {
+            // stash any subsequent requests
+            Receive<CanAcceptJob>(job => Stash.Stash());
+        
             Receive<UnableToAcceptJob>(job =>
             {
-                _canAcceptJobSender.Tell(job);
+                pendingJobReplies--;
+                if (pendingJobReplies == 0)
+                {
+                    _canAcceptJobSender.Tell(job);
+                    BecomeReady();
+                }
             });
-
+        
             Receive<AbleToAcceptJob>(job =>
             {
                 _canAcceptJobSender.Tell(job);
-
-                //start processing messages
-                _coordinator.Tell(new GithubCoordinatorActor.BeginJob(job.Repo));
-
-                //launch the new window to view results of the processing
-                Context.ActorSelection(ActorPaths.MainFormActor.Path).Tell(new MainFormActor.LaunchRepoResultsWindow(job.Repo, Sender));
+        
+                // start processing messages
+                Sender.Tell(new GithubCoordinatorActor.BeginJob(job.Repo));
+        
+                // launch the new window to view results of the processing
+                Context.ActorSelection(ActorPaths.MainFormActor.Path).Tell(
+                    new MainFormActor.LaunchRepoResultsWindow(job.Repo, Sender));
+        
+                BecomeReady();
             });
+        }
+        
+        private void BecomeReady()
+        {
+            Become(Ready);
+            Stash.UnstashAll();
         }
 
         protected override void PreStart()
