@@ -1,5 +1,7 @@
 language: csharp
 script:
   - xbuild /p:Configuration=Debug Unit-3/DoThis/GithubActors.sln
+  - xbuild /p:Configuration=Debug Unit-2/DoThis/SystemCharting.sln
 before_script:
   - nuget restore Unit-3/DoThis/GithubActors.sln
+  - nuget restore Unit-2/DoThis/SystemCharting.sln
