@@ -48,6 +48,7 @@ namespace GithubActors.Actors
 
         private IActorRef _coordinator;
         private IActorRef _canAcceptJobSender;
+        private int pendingJobReplies;
 
         public GithubCommanderActor()
         {
